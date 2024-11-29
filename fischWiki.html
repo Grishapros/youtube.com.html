@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фото с веб-камеры</title>
+</head>
+<body>
+    <h1>Привет, друг! Это пранк!</h1>
+    <button id="startCamera">Включить камеру</button>
+    <video id="video" width="640" height="480" autoplay></video>
+    <button id="capture">Сделать фото</button>
+    <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
+
+    <script>
+        document.getElementById("startCamera").addEventListener("click", function() {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function(stream) {
+                    document.getElementById("video").srcObject = stream;
+                })
+                .catch(function(err) {
+                    console.log("Ошибка доступа к камере: " + err);
+                });
+        });
+
+        document.getElementById("capture").addEventListener("click", function() {
+            var canvas = document.getElementById("canvas");
+            var video = document.getElementById("video");
+            var context = canvas.getContext("2d");
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            var imageData = canvas.toDataURL("image/png");
+            console.log("Фото сделано! Ссылка на изображение: " + imageData);
+            alert("Фото сделано! Проверь консоль.");
+        });
+    </script>
+</body>
+</html>
